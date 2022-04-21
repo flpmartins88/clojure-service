@@ -1,11 +1,7 @@
-(ns service.routes)
-
-(defn status
-  [request]
-  {:status 200
-   :body   "OK"})
+(ns service.routes
+  (:require [service.diplomat.http-server :as http-server]))
 
 (def routes
   #{["/status"
-     :get status
+     :get http-server/status
      :route-name :status-route]})
