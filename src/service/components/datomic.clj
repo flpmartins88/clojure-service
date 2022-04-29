@@ -13,7 +13,7 @@
 ; This connection in parameter is the same connection that will be added in service map
 ; The component used in start/stop functions, are the map returned by the assoc function
 (defrecord Datomic
-  [client]
+  [database-schemas client]
   component/Lifecycle
 
   (start [component]
@@ -21,6 +21,7 @@
       component
       (let [client (d/client client-params)]
         (d/create-database client db-params)
+        (d/transact (d/connect client db-params) {:tx-data database-schemas})
         (assoc component :client client))))
 
   (stop [component]
@@ -30,6 +31,8 @@
   (def client (d/client client-params))
   (d/create-database client db-params)
   (def datomic (d/connect client db-params))
+
+  (d/transact datomic {:tx-data service.db.datomic.schemas/customer-schema})
 
   (datomic.dev-local/release-db (merge client-params db-params)))
 

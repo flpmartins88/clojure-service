@@ -5,7 +5,11 @@
             [service.components.pedestal :as components.pedestal]
             [service.components.datomic :as components.datomic]
             [service.components.interceptors :as components.interceptors]
-            [service.routes]))
+            [service.routes]
+            [service.db.datomic.schemas :as datomic.schemas]))
+
+(def database-schemas
+  (into datomic.schemas/customer-schema))
 
 (defn new-system
   [env]
@@ -16,6 +20,7 @@
                                       ::http/join?  false}
 
                         :pedestal (component/using (components.pedestal/new-pedestal env) [:service-map :interceptors])
-                        :datomic (component/using (components.datomic/new-datomic) [])
+                        :datomic (component/using (components.datomic/new-datomic) [:database-schemas])
 
-                        :interceptors (component/using (components.interceptors/new-interceptors) [:datomic])))
+                        :interceptors (component/using (components.interceptors/new-interceptors) [:datomic])
+                        :database-schemas database-schemas))

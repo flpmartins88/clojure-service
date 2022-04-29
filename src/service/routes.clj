@@ -2,6 +2,5 @@
   (:require [service.diplomat.http-server :as http-server]))
 
 (def routes
-  #{["/status"
-     :get http-server/status
-     :route-name :status-route]})
+  (into http-server/default-routes
+        http-server/customer-routes))
