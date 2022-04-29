@@ -5,7 +5,8 @@
             [com.stuartsierra.component :as component]
             [clojure.test :refer :all]
             [service.routes]
-            [service.system]))
+            [service.system]
+            [schema.test]))
 
 (def url-for (route/url-for-routes
                (route/expand-routes service.routes/routes)))
@@ -22,10 +23,10 @@
        (finally
          (component/stop ~bound-var)))))
 
-(deftest status-test
+(schema.test/deftest status-test
   (with-system [sut (service.system/new-system :test)]
     (testing "When send a request to get status")
-    (let [service               (service-fn sut)
+    (let [service (service-fn sut)
           {:keys [status body]} (response-for service :get (url-for :status-route))]
       (testing "Then the result"
         (testing "status code should be 200"
