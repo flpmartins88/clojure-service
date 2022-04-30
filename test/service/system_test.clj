@@ -6,7 +6,9 @@
             [clojure.test :refer :all]
             [service.routes]
             [service.system]
-            [schema.test]))
+            [schema.test]
+            [datomic.client.api :as d]
+            [service.components.datomic :as components.datomic]))
 
 (def url-for (route/url-for-routes
                (route/expand-routes service.routes/routes)))
@@ -22,6 +24,22 @@
        ~@body
        (finally
          (component/stop ~bound-var)))))
+
+(defmacro with-database
+  "Get a connection from components"
+  [system [datomic db] & body]
+  (let [client (gensym "client")]
+    `(let [~client (get-in ~system [:datomic :client])
+           ~datomic (d/connect ~client components.datomic/db-params)]
+       ~@body)))
+
+;(with-database {:datomic {:client "a"}}
+;  [datomic db]
+;  datomic)
+;
+;
+;(let [datomic (get-in system :datomic :client)]
+;  )
 
 (schema.test/deftest status-test
   (with-system [sut (service.system/new-system :test)]

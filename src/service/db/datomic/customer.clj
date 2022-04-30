@@ -1,8 +1,7 @@
 (ns service.db.datomic.customer
   (:require [schema.core :as s]
             [service.schema.customer :as schema.customer]
-            [datomic.client.api :as d]
-            [service.commons :refer [tap]]))
+            [datomic.client.api :as d]))
 
 (defn- customer->datomic
   [customer])

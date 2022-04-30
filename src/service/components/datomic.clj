@@ -10,10 +10,14 @@
 
 (def db-params {:db-name "orders"})
 
+(defn test?
+  [environment]
+  (= :test environment))
+
 ; This connection in parameter is the same connection that will be added in service map
 ; The component used in start/stop functions, are the map returned by the assoc function
 (defrecord Datomic
-  [database-schemas client]
+  [environment database-schemas client]
   component/Lifecycle
 
   (start [component]
@@ -25,6 +29,8 @@
         (assoc component :client client))))
 
   (stop [component]
+    (when (test? environment)
+      (d/delete-database client db-params))
     (assoc component :client nil)))
 
 (comment

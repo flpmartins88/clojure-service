@@ -13,14 +13,15 @@
 
 (defn new-system
   [env]
-  (component/system-map :service-map {:env          env
+  (component/system-map :environment env
+                        :service-map {:env          env
                                       ::http/routes service.routes/routes
                                       ::http/type   :jetty
                                       ::http/port   8890
                                       ::http/join?  false}
 
                         :pedestal (component/using (components.pedestal/new-pedestal env) [:service-map :interceptors])
-                        :datomic (component/using (components.datomic/new-datomic) [:database-schemas])
+                        :datomic (component/using (components.datomic/new-datomic) [:environment :database-schemas])
 
                         :interceptors (component/using (components.interceptors/new-interceptors) [:datomic])
                         :database-schemas database-schemas))
