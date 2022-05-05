@@ -1,4 +1,4 @@
-(ns service.diplomat.http-server
+(ns service.ports.http-server
   (:require [service.controllers.customer :as controllers.customer]
             [service.schema.customer :as schema.customer]))
 
@@ -14,6 +14,12 @@
                                                  :type schema.customer/type-person}
                                       {:datomic datomic})})
 
+(defn customer-by-id!
+  [{{customer-id :id} :path-params
+    {datomic :datomic} :components}]
+  {:status 200
+   :body   (controllers.customer/find-by-id! (parse-uuid customer-id) {:datomic datomic})})
+
 (defn all-customers!
   [{{datomic :datomic} :components}]
   {:status 200
@@ -25,7 +31,10 @@
      :route-name :customers-create]
     ["/customers"
      :get all-customers!
-     :route-name :customers-get]})
+     :route-name :customers-get]
+    ["/customers/:id"
+     :get customer-by-id!
+     :route-name :get-customer-by-id]})
 
 (def default-routes
   #{["/status"

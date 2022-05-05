@@ -22,6 +22,25 @@
           (is (match? #:customer{:id uuid?, :name "Felipe", :type :customer.type/person}
                       (clojure.edn/read-string body))))))))
 
+(schema.test/deftest get-customer-by-id
+  (with-system [sut (service.system/new-system :test)]
+    (with-database sut [datomic db]
+      (testing "Given a customer in database"
+        (let [customer #:customer{:id (random-uuid) :name "Pedro" :type :customer.type/person}]
+          (d/transact datomic {:tx-data [customer]})
+          (testing "When send a request to get a customer by ID"
+            (let [service (service-fn sut)
+                  {:keys [status body]} (response-for service :get (clojure.string/replace (url-for :get-customer-by-id)
+                                                                                           ":id"
+                                                                                           (str (:customer/id customer))))]
+              (testing "Then the result"
+                (testing "status should be 200"
+                  (is (= 200 status)))
+
+                (testing "body should return the customer"
+                  (is (match? customer
+                              (clojure.edn/read-string body))))))))))))
+
 (schema.test/deftest get-customers-test
   (with-system [sut (service.system/new-system :test)]
     (with-database sut [datomic db]
@@ -42,4 +61,5 @@
 
 (comment
   (create-customer-test)
-  (get-customers-test))
+  (get-customers-test)
+  (get-customer-by-id))

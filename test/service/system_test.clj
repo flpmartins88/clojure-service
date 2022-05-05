@@ -33,14 +33,6 @@
            ~datomic (d/connect ~client components.datomic/db-params)]
        ~@body)))
 
-;(with-database {:datomic {:client "a"}}
-;  [datomic db]
-;  datomic)
-;
-;
-;(let [datomic (get-in system :datomic :client)]
-;  )
-
 (schema.test/deftest status-test
   (with-system [sut (service.system/new-system :test)]
     (testing "When send a request to get status")

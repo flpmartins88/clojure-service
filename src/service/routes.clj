@@ -1,5 +1,5 @@
 (ns service.routes
-  (:require [service.diplomat.http-server :as http-server]))
+  (:require [service.ports.http-server :as http-server]))
 
 (def routes
   (into http-server/default-routes
