@@ -2,13 +2,13 @@ name: Clojure CI
 
 on:
   push:
-#    branches: [ master ]
+    branches: [ master ]
   pull_request:
-#    branches: [ master ]
+    branches: [ master ]
 
 jobs:
   build:
-
+    environment: test
     runs-on: ubuntu-latest
 
     steps:
