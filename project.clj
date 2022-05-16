@@ -22,5 +22,8 @@
                  [io.pedestal/pedestal.jetty "0.5.10"]
                  [org.slf4j/slf4j-simple "1.7.36"]
 
+                 [org.apache.kafka/kafka-clients "3.1.0"]
+                 [com.fasterxml.jackson.dataformat/jackson-dataformat-cbor "2.13.2"]
+
                  [nubank/matcher-combinators "3.5.0"]]
   :repl-options {:init-ns service.core})

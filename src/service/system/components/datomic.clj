@@ -1,7 +1,9 @@
-(ns service.components.datomic
+(ns service.system.components.datomic
   (:require [com.stuartsierra.component :as component]
+            [service.system.protocols.datomic :as protocols.datomic]
             [datomic.client.api :as d]
-            [datomic.dev-local]))
+            [datomic.dev-local]
+            [service.commons :refer [tap]]))
 
 (def client-params {:server-type :dev-local
                     :storage-dir :mem
@@ -30,7 +32,12 @@
   (stop [component]
     (when (test? environment)
       (d/delete-database client db-params))
-    (assoc component :client nil)))
+    (assoc component :client nil))
+
+  protocols.datomic/Datomic
+
+  (connect [this]
+    (d/connect (-> this :client) db-params)))
 
 (comment
   (def client (d/client client-params))

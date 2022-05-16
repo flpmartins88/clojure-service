@@ -8,7 +8,7 @@
             [service.system]
             [schema.test]
             [datomic.client.api :as d]
-            [service.components.datomic :as components.datomic]))
+            [service.system.components.datomic :as components.datomic]))
 
 (def url-for (route/url-for-routes
                (route/expand-routes service.routes/routes)))

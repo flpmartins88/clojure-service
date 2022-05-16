@@ -7,16 +7,17 @@
             [service.routes]
             [service.system]
             [schema.test]
-            [datomic.client.api :as d]))
+            [datomic.client.api :as d]
+            [service.schema.customer :as schema.customer]))
 
 (schema.test/deftest create-customer-test
   (with-system [sut (service.system/new-system :test)]
     (testing "When send a request to create a customer")
     (let [service (service-fn sut)
-          {:keys [status body]} (response-for service :post (url-for :customers-create))]
+          {:keys [status body]} (response-for service :post (url-for :customers-create) :body "{'name': 'Felipe Martins', 'type': 'person'}")]
       (testing "Then the result"
         (testing "status code should be 200"
-          (is (= 200 status)))
+          (is (= 201 status)))
 
         (testing "body should be OK"
           (is (match? #:customer{:id uuid?, :name "Felipe", :type :customer.type/person}

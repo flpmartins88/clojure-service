@@ -1,4 +1,4 @@
-(ns service.components.pedestal
+(ns service.system.components.pedestal
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.http :as http]))
 

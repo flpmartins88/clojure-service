@@ -1,6 +1,7 @@
 (ns service.ports.http-server
   (:require [service.controllers.customer :as controllers.customer]
-            [service.schema.customer :as schema.customer]))
+            [service.schema.customer :as schema.customer]
+            [service.commons :refer [tap]]))
 
 (defn status
   [_request]
@@ -8,8 +9,9 @@
    :body   "OK"})
 
 (defn create-customer!
-  [{{datomic :datomic} :components}]
-  {:status 200
+  [{{datomic :datomic} :components :as request}]
+  (tap (-> request :body))
+  {:status 201
    :body   (controllers.customer/add! #:customer{:name "Felipe"
                                                  :type schema.customer/type-person}
                                       {:datomic datomic})})
