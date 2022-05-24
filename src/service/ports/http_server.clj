@@ -1,7 +1,7 @@
 (ns service.ports.http-server
   (:require [service.controllers.customer :as controllers.customer]
             [service.schema.customer :as schema.customer]
-            [service.commons :refer [tap]]))
+            [service.commons :refer [spy]]))
 
 (defn status
   [_request]
@@ -9,18 +9,19 @@
    :body   "OK"})
 
 (defn create-customer!
-  [{{datomic :datomic} :components :as request}]
-  (tap (-> request :body))
+  [{{:keys [datomic producer]} :components :as request}]
+  (spy (-> request :body))
   {:status 201
    :body   (controllers.customer/add! #:customer{:name "Felipe"
                                                  :type schema.customer/type-person}
-                                      {:datomic datomic})})
+                                      {:datomic  datomic
+                                       :producer producer})})
 
 (defn customer-by-id!
   [{{customer-id :id} :path-params
-    {datomic :datomic} :components}]
+    {datomic :datomic producer :producer} :components}]
   {:status 200
-   :body   (controllers.customer/find-by-id! (parse-uuid customer-id) {:datomic datomic})})
+   :body   (controllers.customer/find-by-id! (parse-uuid customer-id) {:datomic datomic :producer producer})})
 
 (defn all-customers!
   [{{datomic :datomic} :components}]

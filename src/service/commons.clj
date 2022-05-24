@@ -1,9 +1,9 @@
 (ns service.commons)
 
-(defmacro tap
+(defmacro spy
   "Helper function to extract values from functions"
   [body]
   `(let [result# ~body]
-     (println "tap   " "==>" (quote ~body) "<==")
+     (println "input " "==>" (quote ~body) "<==")
      (println "result" "==>" result# "<==")
      result#))

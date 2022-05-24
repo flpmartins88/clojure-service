@@ -2,4 +2,5 @@
   (:require [schema.core :as s]))
 
 (s/defschema Context
-  {(s/optional-key :datomic) s/Any})
+  {(s/optional-key :datomic)  s/Any
+   (s/optional-key :producer) s/Any})

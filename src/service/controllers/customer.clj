@@ -3,12 +3,16 @@
             [service.schema.context :as schema.context]
             [service.schema.customer :as schema.customer]
             [service.db.datomic.customer :as datomic.customer]
-            [datomic.client.api :as d]))
+            [service.ports.producer :as ports.producer]
+            [datomic.client.api :as d]
+            [service.commons :refer [spy]]))
 
 (s/defn add! :- schema.customer/Customer
   [customer :- schema.customer/NewCustomer
-   {:keys [datomic]} :- schema.context/Context]
-  (datomic.customer/persist! customer datomic))
+   {:keys [datomic producer]} :- schema.context/Context]
+  (spy datomic)
+  (doto (datomic.customer/persist! customer datomic)
+    (ports.producer/customer-created producer)))
 
 (s/defn find-by-id! :- schema.customer/Customer
   [customer-id :- s/Uuid

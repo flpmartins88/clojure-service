@@ -1,7 +1,8 @@
 (ns service.db.datomic.customer
   (:require [schema.core :as s]
             [service.schema.customer :as schema.customer]
-            [datomic.client.api :as d]))
+            [datomic.client.api :as d]
+            [service.system.types :as types]))
 
 (s/defn find-by-id :- schema.customer/Customer
   [customer-id :- s/Uuid
@@ -17,7 +18,7 @@
 
 (s/defn persist! :- schema.customer/Customer
   [customer :- schema.customer/NewCustomer
-   datomic :- s/Any]
+   datomic :- types/Datomic]
   (let [customer-id (random-uuid)
         customer-with-id (assoc customer :customer/id customer-id)]
     (d/transact datomic {:tx-data [customer-with-id]})

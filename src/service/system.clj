@@ -6,7 +6,8 @@
             [service.system.components.datomic :as components.datomic]
             [service.system.components.interceptors :as components.interceptors]
             [service.routes]
-            [service.db.datomic.schemas :as datomic.schemas]))
+            [service.db.datomic.schemas :as datomic.schemas]
+            [service.system.components.kafka-producer :as components.kafka-producer]))
 
 (def database-schemas
   (into datomic.schemas/customer-schema))
@@ -20,10 +21,10 @@
                                       ::http/port   8890
                                       ::http/join?  false}
 
-                        :kafka-producer (components)
+                        :kafka-producer (components.kafka-producer/new-kafka-producer)
 
                         :pedestal (component/using (components.pedestal/new-pedestal env) [:service-map :interceptors])
                         :datomic (component/using (components.datomic/new-datomic) [:environment :database-schemas])
 
-                        :interceptors (component/using (components.interceptors/new-interceptors) [:datomic])
+                        :interceptors (component/using (components.interceptors/new-interceptors) [:datomic :kafka-producer])
                         :database-schemas database-schemas))

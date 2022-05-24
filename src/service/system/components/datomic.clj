@@ -2,8 +2,7 @@
   (:require [com.stuartsierra.component :as component]
             [service.system.protocols.datomic :as protocols.datomic]
             [datomic.client.api :as d]
-            [datomic.dev-local]
-            [service.commons :refer [tap]]))
+            [datomic.dev-local]))
 
 (def client-params {:server-type :dev-local
                     :storage-dir :mem
