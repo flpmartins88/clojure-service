@@ -7,6 +7,7 @@
             [service.routes]
             [service.system]
             [schema.test]
+            [service.aux.commons :refer :all]
             [datomic.client.api :as d]
             [service.schema.customer :as schema.customer]))
 
@@ -14,7 +15,7 @@
   (with-system [sut (service.system/new-system :test)]
     (testing "When send a request to create a customer")
     (let [service (service-fn sut)
-          {:keys [status body]} (response-for service :post (url-for :customers-create) :body "{'name': 'Felipe Martins', 'type': 'person'}")]
+          {:keys [status body]} (response-for service :post (url-for :customers-create) :body "{\"name\": \"Felipe Martins\", \"type\": \"person\"}" :headers {"Content-Type" "application/json"})]
       (testing "Then the result"
         (testing "status code should be 200"
           (is (= 201 status)))

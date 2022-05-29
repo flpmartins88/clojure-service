@@ -1,7 +1,11 @@
 (ns service.ports.http-server
   (:require [service.controllers.customer :as controllers.customer]
             [service.schema.customer :as schema.customer]
-            [service.commons :refer [spy]]))
+            [io.pedestal.http.body-params :as http.body-params]
+            [io.pedestal.http.request :as http]
+            [service.adapters.customer :as adapters.customer]
+            [service.commons :refer [spy]])
+  (:import (java.util Scanner)))
 
 (defn status
   [_request]
@@ -9,13 +13,12 @@
    :body   "OK"})
 
 (defn create-customer!
-  [{{:keys [datomic producer]} :components :as request}]
-  (spy (-> request :body))
+  [{body                       :json-params
+    {:keys [datomic producer]} :components}]
   {:status 201
-   :body   (controllers.customer/add! #:customer{:name "Felipe"
-                                                 :type schema.customer/type-person}
-                                      {:datomic  datomic
-                                       :producer producer})})
+   :body   (-> body
+               adapters.customer/wire->new-customer
+               (controllers.customer/add! {:datomic datomic :producer producer}))})
 
 (defn customer-by-id!
   [{{customer-id :id} :path-params
@@ -28,15 +31,18 @@
   {:status 200
    :body   (controllers.customer/find-all! {:datomic datomic})})
 
+(def common-interceptors
+  [(http.body-params/body-params)])
+
 (def customer-routes
   #{["/customers"
-     :post create-customer!
+     :post (conj common-interceptors create-customer!)
      :route-name :customers-create]
     ["/customers"
-     :get all-customers!
+     :get (conj common-interceptors all-customers!)
      :route-name :customers-get]
     ["/customers/:id"
-     :get customer-by-id!
+     :get (conj common-interceptors customer-by-id!)
      :route-name :get-customer-by-id]})
 
 (def default-routes

@@ -13,3 +13,9 @@
     :db/cardinality :db.cardinality/one}
    {:db/ident :customer.type/person}
    {:db/ident :customer.type/company}])
+
+(def item-schema
+  [])
+
+(def order-schema
+  [])

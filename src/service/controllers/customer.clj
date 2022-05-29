@@ -10,7 +10,6 @@
 (s/defn add! :- schema.customer/Customer
   [customer :- schema.customer/NewCustomer
    {:keys [datomic producer]} :- schema.context/Context]
-  (spy datomic)
   (doto (datomic.customer/persist! customer datomic)
     (ports.producer/customer-created producer)))
 

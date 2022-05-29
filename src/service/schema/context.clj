@@ -1,6 +1,7 @@
 (ns service.schema.context
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s]
+            [service.system.types :as types]))
 
 (s/defschema Context
-  {(s/optional-key :datomic)  s/Any
-   (s/optional-key :producer) s/Any})
+  {(s/optional-key :datomic)  types/Datomic
+   (s/optional-key :producer) types/KafkaProducer})
