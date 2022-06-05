@@ -2,7 +2,8 @@
   (:import (org.apache.kafka.clients.consumer ConsumerConfig OffsetAndMetadata KafkaConsumer)
            (org.apache.kafka.common.serialization StringDeserializer)
            (org.apache.kafka.common TopicPartition)
-           (java.time Duration)))
+           (java.time Duration)
+           (java.util Map)))
 
 (def consumer-configs
   {ConsumerConfig/BOOTSTRAP_SERVERS_CONFIG        "localhost:9092"
@@ -36,14 +37,14 @@
 
 ; Obs: para essa versão funcionar, precisa colocar o max-fetch em 1
 (defn consume []
-  (with-open [consumer (KafkaConsumer. consumer-configs)]
+  (with-open [consumer (KafkaConsumer. ^Map consumer-configs)]
     (.subscribe consumer ["test-topic-001"])
     (loop [records []]
       (if-let [record (first records)]
         (if (consume-record record)
-          (.commitSync consumer (build-commit-map record))
+          (.commitSync consumer ^Map (build-commit-map record))
           (seek consumer record)))
-      (recur (seq (.pool consumer (Duration/ofSeconds 1)))))))
+      (recur (seq (.poll consumer ^Duration (Duration/ofSeconds 1)))))))
 
-(defn -main [& args]
+(defn -main [& _args]
   (consume))

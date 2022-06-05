@@ -1,7 +1,7 @@
 (ns examples.simple-producer
-  (:import (org.apache.kafka.clients.producer ProducerConfig Callback KafkaProducer ProducerRecord)
+  (:import (org.apache.kafka.clients.producer ProducerConfig Callback ProducerRecord KafkaProducer)
            (org.apache.kafka.common.serialization StringSerializer)
-           (java.util Properties)))
+           (java.util Properties Map)))
 
 #_(def producer-properties
   (doto (Properties.)
@@ -24,7 +24,7 @@
                  "Offset:" (.offset metadata))))))
 
 (defn produce [value]
-  (with-open [producer (KafkaProducer. producer-configs)]
+  (with-open [producer (KafkaProducer. ^Map producer-configs)]
     (let [record (ProducerRecord. "test-topic-001" value)]
       (.send producer record callback))))
 

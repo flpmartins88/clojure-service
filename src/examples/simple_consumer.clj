@@ -1,8 +1,8 @@
 (ns examples.simple-consumer
-  (:import (org.apache.kafka.clients.producer ProducerConfig)
-           (org.apache.kafka.common.serialization StringSerializer StringDeserializer)
+  (:import (org.apache.kafka.common.serialization StringDeserializer)
            (org.apache.kafka.clients.consumer ConsumerConfig KafkaConsumer)
-           (java.time Duration)))
+           (java.time Duration)
+           (java.util Map)))
 
 (def consumer-configs
   {ConsumerConfig/BOOTSTRAP_SERVERS_CONFIG        "localhost:9092"
@@ -18,12 +18,12 @@
            "Offset:" (.offset record)))
 
 (defn consume []
-  (with-open [consumer (KafkaConsumer. consumer-configs)]
+  (with-open [consumer (KafkaConsumer. ^Map consumer-configs)]
     (.subscribe consumer ["test-topic-001"])
     (loop [records []]
       (if (not (empty? records))
         (apply consumer-record records))
       (recur (seq (.poll consumer (Duration/ofSeconds 1)))))))
 
-(defn -main [& args]
+(defn -main [& _args]
   (consume))
