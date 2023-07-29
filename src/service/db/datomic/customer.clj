@@ -24,7 +24,7 @@
     (d/transact datomic {:tx-data [customer-with-id]})
     (find-by-id customer-id (d/db datomic))))
 
-(s/defn find-all! :- [schema.customer/Customer]
+(s/defn find-all :- [schema.customer/Customer]
   [datomic :- s/Any]
   (->> (d/q '{:find  [(pull ?customer [* {:customer/type [:db/ident]}])]
              :where [[?customer :customer/id _]]}

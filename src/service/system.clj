@@ -10,7 +10,9 @@
             [service.system.components.kafka-producer :as components.kafka-producer]))
 
 (def database-schemas
-  (into datomic.schemas/customer-schema))
+  (concat datomic.schemas/customer-schema
+          datomic.schemas/order-schema
+          datomic.schemas/item-schema))
 
 (defn new-system
   [env]

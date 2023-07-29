@@ -12,3 +12,5 @@ pom.xml.asc
 .hg/
 /clojure-service.iml
 /.idea/
+.lsp/
+.clj-kondo/

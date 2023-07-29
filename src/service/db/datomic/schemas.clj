@@ -15,7 +15,28 @@
    {:db/ident :customer.type/company}])
 
 (def item-schema
-  [])
+  [{:db/ident       :item/id
+    :db/valueType   :db.type/uuid
+    :db/cardinality :db.cardinality/one
+    :db/unique      :db.unique/identity}
+   {:db/ident       :item/order
+    :db/valueType   :db.type/ref
+    :db/cardinality :db.cardinality/one}
+   {:db/ident       :item/name
+    :db/valueType   :db.type/string
+    :db/cardinality :db.cardinality/one}
+   {:db/ident       :item/quantity
+    :db/valueType   :db.type/bigint
+    :db/cardinality :db.cardinality/one}
+   {:db/ident       :item/price
+    :db/valueType   :db.type/bigdec
+    :db/cardinality :db.cardinality/one}])
 
 (def order-schema
-  [])
+  [{:db/ident       :order/id
+    :db/valueType   :db.type/uuid
+    :db/cardinality :db.cardinality/one
+    :db/unique      :db.unique/identity}
+   {:db/ident       :order/customer
+    :db/valueType   :db.type/ref
+    :db/cardinality :db.cardinality/one}])

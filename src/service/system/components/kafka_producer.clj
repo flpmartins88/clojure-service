@@ -2,7 +2,8 @@
   (:require [com.stuartsierra.component :as component]
             [service.system.protocols.kafka-producer :as protocols.kafka-producer])
   (:import (org.apache.kafka.clients.producer ProducerConfig Callback ProducerRecord)
-           (org.apache.kafka.common.serialization StringSerializer)))
+           (org.apache.kafka.common.serialization StringSerializer)
+           (java.util Map)))
 
 (def producer-configs
   {ProducerConfig/BOOTSTRAP_SERVERS_CONFIG      "localhost:9092"
@@ -24,7 +25,7 @@
   component/Lifecycle
   (start [this]
     (when (not producer)
-      (let [local-producer (org.apache.kafka.clients.producer.KafkaProducer. producer-configs)]
+      (let [local-producer (org.apache.kafka.clients.producer.KafkaProducer. ^Map producer-configs)]
         (assoc this :producer local-producer))))
 
   (stop [this]

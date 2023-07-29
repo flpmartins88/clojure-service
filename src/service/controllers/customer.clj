@@ -18,6 +18,6 @@
    {:keys [datomic]} :- schema.context/Context]
   (datomic.customer/find-by-id customer-id (d/db datomic)))
 
-(s/defn find-all! :- [schema.customer/Customer]
+(s/defn find-all :- [schema.customer/Customer]
   [{:keys [datomic]} :- schema.context/Context]
-  (datomic.customer/find-all! datomic))
+  (datomic.customer/find-all datomic))

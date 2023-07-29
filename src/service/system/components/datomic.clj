@@ -44,6 +44,7 @@
   (def datomic (d/connect client db-params))
 
   (d/transact datomic {:tx-data service.db.datomic.schemas/customer-schema})
+  (d/transact datomic {:tx-data service.db.datomic.schemas/item-schema})
 
   (datomic.dev-local/release-db (merge client-params db-params)))
 

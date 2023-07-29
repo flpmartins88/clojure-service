@@ -1,11 +1,7 @@
 (ns service.ports.http-server
-  (:require [service.controllers.customer :as controllers.customer]
-            [service.schema.customer :as schema.customer]
-            [io.pedestal.http.body-params :as http.body-params]
-            [io.pedestal.http.request :as http]
+  (:require [io.pedestal.http.body-params :as http.body-params]
             [service.adapters.customer :as adapters.customer]
-            [service.commons :refer [spy]])
-  (:import (java.util Scanner)))
+            [service.controllers.customer :as controllers.customer]))
 
 (defn status
   [_request]
@@ -29,7 +25,7 @@
 (defn all-customers!
   [{{datomic :datomic} :components}]
   {:status 200
-   :body   (controllers.customer/find-all! {:datomic datomic})})
+   :body   (controllers.customer/find-all {:datomic datomic})})
 
 (def common-interceptors
   [(http.body-params/body-params)])
