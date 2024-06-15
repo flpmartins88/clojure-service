@@ -7,5 +7,5 @@
   [{customer-name :name
     customer-type :type} :- wire.customer/NewCustomer]
   (let [customer-type (keyword "customer.type" (name customer-type))]
-    #:customer{:name customer-name
-               :type customer-type}))
+    #:customer {:name customer-name
+                :type customer-type}))

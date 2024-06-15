@@ -16,17 +16,18 @@
 
 (defn new-system
   [env]
-  (component/system-map :environment env
-                        :service-map {:env          env
-                                      ::http/routes service.routes/routes
-                                      ::http/type   :jetty
-                                      ::http/port   8890
-                                      ::http/join?  false}
+  (component/system-map
+    :environment      env
+    :service-map      {:env          env
+                       ::http/routes service.routes/routes
+                       ::http/type   :jetty
+                       ::http/port   8890
+                       ::http/join?  false}
 
-                        :kafka-producer (components.kafka-producer/new-kafka-producer)
+    :kafka-producer   (components.kafka-producer/new-kafka-producer)
 
-                        :pedestal (component/using (components.pedestal/new-pedestal env) [:service-map :interceptors])
-                        :datomic (component/using (components.datomic/new-datomic) [:environment :database-schemas])
+    :pedestal         (component/using (components.pedestal/new-pedestal env) [:service-map :interceptors])
+    :datomic          (component/using (components.datomic/new-datomic) [:environment :database-schemas])
 
-                        :interceptors (component/using (components.interceptors/new-interceptors) [:datomic :kafka-producer])
-                        :database-schemas database-schemas))
+    :interceptors     (component/using (components.interceptors/new-interceptors) [:datomic :kafka-producer])
+    :database-schemas database-schemas))

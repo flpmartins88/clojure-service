@@ -1,6 +1,6 @@
 (ns service.system.protocols.kafka-producer)
 
-; In some place I need to connect in kafka
+; In some places I need to connect in kafka
 ; Maybe this will reference the Kafka Component
 ; or kafka producer
 

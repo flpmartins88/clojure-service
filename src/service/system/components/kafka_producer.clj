@@ -19,7 +19,6 @@
                   :partition (.partition metadata)
                   :offset    (.offset metadata)})))))
 
-
 (defrecord KafkaProducer
   [producer]
   component/Lifecycle

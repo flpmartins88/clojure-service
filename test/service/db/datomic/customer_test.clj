@@ -4,7 +4,7 @@
             [service.db.datomic.customer :as datomic.customer]
             [matcher-combinators.test :refer [match?]]))
 
-#_(defmacro with-database
+(defmacro with-database
   "Get a connection from components"
   [system [datomic db] & body]
   (let [client (gensym "client")]
@@ -13,7 +13,7 @@
        ~@body)))
 
 ; Create a version that does not need to run all system
-(defmacro with-database
+#_(defmacro with-database
   [])
 
 (schema.test/deftest persist!-test

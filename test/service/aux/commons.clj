@@ -28,7 +28,7 @@
   "Get a connection from components"
   [system [datomic db] & body]
   (let [client (gensym "client")]
-    `(let [~client (get-in ~system [:datomic :client])
+    `(let [~client  (get-in ~system [:datomic :client])
            ~datomic (d/connect ~client components.datomic/db-params)]
        ~@body)))
 
