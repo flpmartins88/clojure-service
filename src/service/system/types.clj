@@ -11,11 +11,8 @@
   (s/protocol protocols.datomic/Connection))
 
 (def Date
-  (s/protocol ZonedDateTime))
+  ZonedDateTime)
 
 (s/defn teste
   [date :- Date]
   (println date))
-
-(s/set-fn-validation! true)
-(teste (ZonedDateTime/now))

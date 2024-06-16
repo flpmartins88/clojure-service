@@ -2,7 +2,7 @@
   (:require [com.stuartsierra.component :as component]
             [service.system.protocols.datomic :as protocols.datomic]
             [datomic.client.api :as d]
-            [datomic.dev-local]))
+            #_[datomic.dev-local]))
 
 (def client-params {:server-type :dev-local
                     :storage-dir :mem
@@ -38,7 +38,7 @@
   (connect [this]
     (d/connect (-> this :client) db-params)))
 
-(comment
+#_(comment
   (def client (d/client client-params))
   (d/create-database client db-params)
   (def datomic (d/connect client db-params))
